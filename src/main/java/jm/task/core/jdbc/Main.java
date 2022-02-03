@@ -34,9 +34,9 @@ public class Main {
         for(User user : users){
             System.out.println(user);
         }
-        // Очистка таблицы User(ов)
+//      Очистка таблицы User(ов)
         service.cleanUsersTable();
-        // Удаление таблицы
+//      Удаление таблицы
         service.dropUsersTable();
     }
 }
