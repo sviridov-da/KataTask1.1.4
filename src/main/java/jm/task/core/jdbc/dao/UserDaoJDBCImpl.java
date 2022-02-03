@@ -22,7 +22,9 @@ public class UserDaoJDBCImpl implements UserDao {
                 .append("  PRIMARY KEY (`id`));").toString();
 
         try(Connection connection = Util.getConnection(); Statement statement = connection.createStatement()){
+            connection.setAutoCommit(false);
             statement.execute(query);
+            connection.commit();
         } catch (Exception e) {
             System.out.println("Не удалось создать таблицу");
         }
@@ -32,7 +34,9 @@ public class UserDaoJDBCImpl implements UserDao {
         String query = "DROP TABLE IF EXISTS users";
 
         try(Connection connection = Util.getConnection(); Statement statement = connection.createStatement()){
+            connection.setAutoCommit(false);
             statement.execute(query);
+            connection.commit();
         } catch (Exception e) {
             System.out.println("Не удалось удалить таблицу таблицу");
         }
@@ -45,7 +49,9 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setByte(3, age);
+            connection.setAutoCommit(false);
             statement.execute();
+            connection.commit();
             System.out.println("User с именем - " + name + " добавлен в базу данных");
         } catch (Exception e) {
             System.out.println("Не удалось добавить пользователя таблицу");
@@ -55,9 +61,11 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         String preparedQuery = "DELETE FROM users WHERE id = ?";
 
-        try(Connection connection = Util.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(preparedQuery)){
-            preparedStatement.setLong(1, id);
-            preparedStatement.execute();
+        try(Connection connection = Util.getConnection(); PreparedStatement statement = connection.prepareStatement(preparedQuery)){
+            statement.setLong(1, id);
+            connection.setAutoCommit(false);
+            statement.execute();
+            connection.commit();
         } catch (Exception e) {
             System.out.println("Не удалось очистить таблицу");
         }
@@ -69,7 +77,9 @@ public class UserDaoJDBCImpl implements UserDao {
         User user;
 
         try(Connection connection = Util.getConnection(); Statement statement = connection.createStatement()){
+            connection.setAutoCommit(false);
             ResultSet resultSet =statement.executeQuery(query);
+            //connection.commit();
             while (resultSet.next()){
                 user = new User();
                 user.setId(resultSet.getLong(1));
@@ -88,7 +98,9 @@ public class UserDaoJDBCImpl implements UserDao {
         String query = "DELETE FROM users";
 
         try(Connection connection = Util.getConnection(); Statement statement = connection.createStatement()){
+            connection.setAutoCommit(false);
             statement.execute(query);
+            connection.commit();
         } catch (Exception e) {
             System.out.println("Не удалось очистить таблицу");
         }
